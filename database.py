@@ -1,7 +1,8 @@
 import clickhouse_connect
 from dotenv import load_dotenv
 import os
-
+from pdf2text import extract_text_from_pdf_url
+from parse import full_links
 load_dotenv()
 
 client = clickhouse_connect.get_client(
@@ -12,4 +13,12 @@ client = clickhouse_connect.get_client(
 
 #a = client.command("SELECT * from document") # команд - выборка
 
-#client.query("INSERT INTO document VALUES ('pop1', 'lol1')") # куери - очередь 
+id = 0
+
+bb = extract_text_from_pdf_url(full_links[2])
+client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{full_links[2]}')") # куери - очередь 
+
+#for row in full_links:
+    #bb = extract_text_from_pdf_url(row)
+    #client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{row}')")
+    #id += 1

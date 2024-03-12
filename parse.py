@@ -46,9 +46,9 @@ base_url = 'http://cbr.ru/Crosscut/LawActs/Page/94917?Date.Time=Any'
 session = requests.Session()
 
 cpages = 296  # Кол-во страниц
-for page in range(1, cpages + 1):
-    fetch_documents(page)
+#for page in range(1, cpages + 1):
+    #fetch_documents(page)
 
-full_links.extend(all_full_links)
+#full_links.extend(all_full_links)
 #Итого получаем 2976 ссылок на документы
 # print(len(full_links))
