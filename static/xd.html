@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chat-container {
+            width: 400px;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            padding: 10px;
+        }
+        #message-input {
+            width: 300px;
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        #send-button {
+            padding: 5px 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Support</h1>
+    <div id="chat-container"></div>
+    <input type="text" id="message-input" placeholder="Введите сообщение...">
+    <button id="send-button">Отправить</button>
+
+    <script>
+        // Функция для добавления сообщения в окно чата
+        function addMessage(message) {
+            var chatContainer = document.getElementById("chat-container");
+            var messageElement = document.createElement("div");
+            messageElement.textContent = message;
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Прокрутка вниз
+        }
+
+        // Функция для отправки сообщения на сервер
+        function sendMessage() {
+            var messageInput = document.getElementById("message-input");
+            var message = messageInput.value;
+            if (message.trim() !== "") {
+                fetch('/api/send_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Добавляем ваше сообщение в окно чата
+                    addMessage("Вы: " + message);
+                    // Добавляем ответ на ваше сообщение в окно чата
+                    addMessage("Бот: " + data.response);
+                    // Очищаем поле ввода
+                    messageInput.value = "";
+                })
+                .catch(error => {
+                    console.error('Ошибка при отправке сообщения:', error);
+                });
+            }
+        }
+
+        // Обработчик события для кнопки отправки
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+
+        // Обработчик события для клавиши Enter
+        document.getElementById("message-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        // Функция для загрузки истории чата при загрузке страницы
+        window.onload = function() {
+            fetch('/api/get_message_history')
+                .then(response => response.json())
+                .then(data => {
+                    // Добавляем историю сообщений в окно чата
+                    data.message_history.forEach(message => {
+                        addMessage(message.author + ": " + message.message);
+                    });
+                })
+                .catch(error => {
+                    console.error('Ошибка при получении истории сообщений:', error);
+                });
+        };
+    </script>
+</body>
+</html>
