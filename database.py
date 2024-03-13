@@ -23,8 +23,11 @@ for row in full_links:
     text, success = extract_text_from_pdf_url(row)
     if success:
         try:
-            client.query(f"INSERT INTO document VALUES ({id}, '{text}', '{row}')")
-            id += 1
+            if text[0] == '\n':
+                continue
+            else:
+                client.query(f"INSERT INTO document VALUES ({id}, '{text}', '{row}')")
+                id += 1
         except Exception as e:
             print(f"Ошибка при вставке {[id,row]} в БД: {e}")
     else:
