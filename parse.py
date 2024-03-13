@@ -24,8 +24,7 @@ def parse_from_main_page(url):
         return []
 
 base_url = 'http://cbr.ru/Crosscut/LawActs/Page/94917?Date.Time=Any'
-# Замена 'http://cbr.ru/na/' на работающий URL, если это пример
-document_links = parse_from_main_page(url='https://www.cbr.ru/')  # Указать правильный URL
+document_links = parse_from_main_page(url='https://www.cbr.ru/na')
 # Получаем массив ссылок с главной страницы
 full_links = [base_url + link for link in document_links if link.startswith('/')]
 
