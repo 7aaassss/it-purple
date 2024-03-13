@@ -17,9 +17,15 @@ client = clickhouse_connect.get_client(
 id = 0
 
 #bb = extract_text_from_pdf_url(full_links[2])
-#client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{full_links[2]}')") # куери - очередь 
-
-for row in full_links[:100]:
-    bb = extract_text_from_pdf_url(row)
-    client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{row}')")
-    id += 1
+#client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{full_links[2]}')") # куери - очередь
+failed_urls =[]
+for row in full_links:
+    text, success = extract_text_from_pdf_url(row)
+    if success:
+        try:
+            client.query(f"INSERT INTO document VALUES ({id}, '{text}', '{row}')")
+            id += 1
+        except Exception as e:
+            print(f"Ошибка при вставке {[id,row]} в БД: {e}")
+    else:
+        failed_urls.append(row)
