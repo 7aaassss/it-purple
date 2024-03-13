@@ -1,0 +1,6 @@
+python-dotenv
+cliclhouse-connect
+bs4
+requests
+pdflumber
+io  
