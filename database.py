@@ -20,13 +20,17 @@ id = 0
 #client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{full_links[2]}')") # куери - очередь
 failed_urls =[]
 for row in full_links:
-    text, success = extract_text_from_pdf_url(row)
+    text, success, pages = extract_text_from_pdf_url(row)
     if success:
         try:
             if text[0] == '\n':
                 continue
             else:
                 client.query(f"INSERT INTO document VALUES ({id}, '{text}', '{row}')")
+                num_p = 1
+                for page in pages:
+                    client.query(f"INSERT INTO dc_with_pages VALUES ({id}, '{pages[page]}', '{num_p}')")
+                    num_p += 1
                 id += 1
         except Exception as e:
             print(f"Ошибка при вставке {[id,row]} в БД: {e}")
