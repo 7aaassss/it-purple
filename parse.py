@@ -59,5 +59,5 @@ for page in range(1, cpages + 1):
     fetch_documents(page)
 
 full_links.extend(all_full_links)
-# Выводим количество полученных ссылок
+# для дева - колво ссылок
 print(f"Всего получено ссылок: {len(full_links)}")
