@@ -3,8 +3,10 @@ from dotenv import load_dotenv
 import os
 from pdf2text import extract_text_from_pdf_url
 from parse import full_links
-load_dotenv()
+load_dotenv() # для пароля бд 
 
+
+"""подключение к облачной бд"""
 client = clickhouse_connect.get_client(
     host='x2ar8i584r.europe-west4.gcp.clickhouse.cloud',
     port=8443,  
@@ -19,11 +21,12 @@ id = 0
 #bb = extract_text_from_pdf_url(full_links[2])
 #client.query(f"INSERT INTO document VALUES ({id}, '{bb}', '{full_links[2]}')") # куери - очередь
 failed_urls =[]
+#для всех полученных при парсинге страниц делать текст
 for row in full_links:
     text, success, pages = extract_text_from_pdf_url(row)
     if success:
         try:
-            if text[0] == '\n':
+            if text[0] == '\n': # битые файлы
                 continue
             else:
                 client.query(f"INSERT INTO document VALUES ({id}, '{text}', '{row}')")
