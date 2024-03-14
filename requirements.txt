@@ -4,4 +4,6 @@ bs4
 requests
 pdflumber
 io  
-teseract
+tesseract
+Tesseract OCR
+pdf2image
