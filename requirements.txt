@@ -4,3 +4,4 @@ bs4
 requests
 pdflumber
 io  
+teseract
