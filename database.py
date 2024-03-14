@@ -11,7 +11,7 @@ client = clickhouse_connect.get_client(
     host='x2ar8i584r.europe-west4.gcp.clickhouse.cloud',
     port=8443,  
     username='default',
-    password=os.getenv('PSWD')
+    password=os.getenv('PSWD') # замените на строчку password='пароль от бд'
     )
 
 #a = client.command("SELECT * from document") # команд - выборка
